@@ -47,25 +47,11 @@ int main(void)
     lcd_init(LCD_DISP_ON_BLINK);
 
     // Put string(s) on LCD screen
-    lcd_gotoxy(1, 0);
-    lcd_puts("00:00.0");
 
-    lcd_gotoxy(11, 0);
-    lcd_puts("a");
-
-    lcd_gotoxy(1, 1);
-    lcd_puts("b");
-
-    lcd_gotoxy(11, 1);
-    lcd_puts("c");
-
-    //GPIO_mode_output(&DDRB, PB2);
-    //GPIO_write_low(&PORTB, PB2);
-
-    // Configuration of 8-bit Timer/Counter2 for Stopwatch update
-    // Set the overflow prescaler to 16 ms and enable interrupt
-    TIM2_16ms();
-    TIM2_overflow_interrupt_enable();
+    // Configuration of 16-bit Timer/Counter1 for Stopwatch update
+    // Set the overflow prescaler to 1 s and enable interrupt
+    TIM1_overflow_1s();
+    TIM1_overflow_interrupt_enable();
 
     // Enables interrupts by setting the global interrupt mask
     sei();
@@ -84,70 +70,51 @@ int main(void)
 
 /* Interrupt service routines ----------------------------------------*/
 /**********************************************************************
- * Function: Timer/Counter2 overflow interrupt
- * Purpose:  Update the stopwatch on LCD screen every sixth overflow,
- *           ie approximately every 100 ms (6 x 16 ms = 100 ms).
+ * Function: Timer/Counter1 overflow interrupt
+ * Purpose:  Update the stopwatch on LCD screen every second overflow.
  **********************************************************************/
-ISR(TIMER2_OVF_vect)
+ISR(TIMER1_OVF_vect)
 {
-    static uint8_t no_of_overflows = 0;
-    //static uint8_t no_of_overflows_s = 0;
-    static uint8_t tenths = 0;  // Tenths of a second
-    static uint8_t seconds = 0;  // Tenths of a second
-    char string[2];             // String for converted numbers by itoa()
-
-    no_of_overflows++;
-    if (no_of_overflows >= 6)
+    static uint8_t aux = 0;  // Tenths of a second
+      
+    switch (aux)
     {
-        // Do this every 6 x 16 ms = 100 ms
-        no_of_overflows = 0;
-
-        // Count tenth of seconds 0, 1, ..., 9, 0, 1, ...
-        tenths++;
-        if(tenths>9){
-          tenths=0;
-          seconds++;
-          if(seconds>59){
-            seconds = 0;
-          }
-          //Display seconds
-          itoa(seconds, string, 10);  // Convert decimal value to string
-          lcd_gotoxy(4, 0);
-          if(seconds<10){
-            lcd_puts("0");
-          }
-          lcd_puts(string);
-        }
-
-        itoa(tenths, string, 10);  // Convert decimal value to string
-        lcd_gotoxy(7, 0);
-        lcd_puts(string);
-    }
+    case 0:
+      lcd_clrscr();
+      lcd_gotoxy(11,0);
+      lcd_puts("right");
+      break;
+    case 1:
+      lcd_clrscr();
+      lcd_gotoxy(0,0);
+      lcd_puts("left");
+      break;
+    case 2:
+      lcd_clrscr();
+      lcd_gotoxy(7,0);
+      lcd_puts("up");
+      break;
+    case 3:
+      lcd_clrscr();
+      lcd_gotoxy(7,1);
+      lcd_puts("down");
+      break;
+    case 4:
+      lcd_clrscr();
+      lcd_gotoxy(0,1);
+      lcd_puts("static");
+      break;
+    case 5:
+      lcd_clrscr();
+      lcd_gotoxy(12,1);
+      lcd_puts("push");
+      break;
     
-    /*no_of_overflows_s++;
-    if (no_of_overflows_s >= 63)
-    {
-        // Do this every 63 x 16 ms = 1 s
-        no_of_overflows_s = 0;
-
-        // Count seconds 0, 1, ..., 58, 59, 0, ...
-        seconds++;
-        if(seconds>59){
-          seconds=0;
-        }
-
-        itoa(seconds, string, 10);  // Convert decimal value to string
-        if(seconds<10){
-          lcd_gotoxy(5, 0);
-        } else lcd_gotoxy(4, 0);
-        
-        if (strcmp(string, "59")==0){
-          lcd_gotoxy(4, 0);
-          lcd_puts("0");
-          lcd_gotoxy(5, 0);
-          lcd_puts("0");
-        }
-        
-    }*/    
+    default:
+      aux = 0;
+      break;
+    }
+    aux++;
+    
     // Else do nothing and exit the ISR
 }

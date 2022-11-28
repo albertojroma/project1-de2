@@ -24,3 +24,4 @@ Insert a link to a short video with your practical implementation example (1-3 m
 3. [lcd datasheet](https://digilent.com/reference/_media/pmod:pmod:pmodclp_rm.pdf)
 4. [How to use rotary encoder](https://electronoobs.com/eng_arduino_tut125.php)
 5. [Arduino Uno scheme](https://pighixxx.tumblr.com/tagged/Arduino%20Uno)
+6. [ATmega328P datasheet]https://ww1.microchip.com/downloads/aemDocuments/documents/MCU08/ProductDocuments/DataSheets/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf

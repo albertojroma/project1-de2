@@ -45,6 +45,7 @@ int current2;
 int amount=3;
 
 
+
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
  * Function: Main function where the program execution begins
@@ -65,7 +66,8 @@ int main(void)
     // Select input channel ADC0 (voltage divider pin)
 
     // Enable ADC module
-    ADCSRA = ADCSRA | (1<<ADEN); 
+    ADCSRA = ADCSRA | (1<<ADEN);
+     
     // Enable conversion complete interrupt
     ADCSRA = ADCSRA | (1<<ADIE);
     // Set clock prescaler to 128
@@ -104,6 +106,12 @@ int main(void)
  **********************************************************************/
 ISR(TIMER1_OVF_vect)
 {
+    
+    if(ADMUX == 64){ // using ADC0
+        ADMUX = ADMUX | (1<<MUX0);
+    } else { // using ADC1
+        ADMUX = ADMUX & ~(1<<MUX0);
+    }
     // Start ADC conversion
     ADCSRA = ADCSRA | (1<<ADSC);
 }
@@ -120,10 +128,8 @@ ISR(ADC_vect)
     static uint8_t no_of_overflows = 0;
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = ADC;  //0111_1000
-    
-    
-    
+    value = ADC;  //1111_1010
+
     no_of_overflows++;
     if (no_of_overflows >= 3) {
       no_of_overflows = 0;
@@ -132,28 +138,31 @@ ISR(ADC_vect)
         lcd_puts("    ");
         lcd_gotoxy(8,0); //this is done to properly update de value
         lcd_puts(string);
-        itoa(value, string, 16); // 16 to display the value in hexa
-        lcd_gotoxy(12,0);
-        lcd_puts("    ");
-        lcd_gotoxy(13,0); //this is done to properly update de value
-        lcd_puts(string);
-
+      if (ADMUX == 64) { //ADC0 => X-axis 
         lcd_gotoxy(8, 1); 
         lcd_puts("      ");
         lcd_gotoxy(8, 1);
-      switch (value) {
-        case 0:
-            lcd_puts("down");
-            break;
-        case 1022:
-            lcd_puts("up");
-            break;
-        case 1023:
-            lcd_puts("up");
-            break;
-        default:
-            break;
+
+        if (value < 20){
+          lcd_puts("left");  
+        } else if (value > 1000){
+          lcd_puts("right");
+        }
+      } else if (ADMUX == 65){
+        lcd_gotoxy(8, 1); 
+        lcd_puts("      ");
+        lcd_gotoxy(8, 1);
+        
+        if (value < 20){
+          lcd_puts("down");  
+        } else if (value > 1000){
+          lcd_puts("up");
+        }
       }
+      
+        
+
+        
 
      // last_value = GPIO_read(&DDRB, OutputA); // read initial value of outputA
        

@@ -138,25 +138,22 @@ ISR(ADC_vect)
         lcd_puts("    ");
         lcd_gotoxy(8,0); //this is done to properly update de value
         lcd_puts(string);
-      if (ADMUX == 64) { //ADC0 => X-axis 
-        lcd_gotoxy(8, 1); 
-        lcd_puts("      ");
-        lcd_gotoxy(8, 1);
-
+      
+      if (ADMUX == 64) { //ADC0 => X-axis
         if (value < 20){
-          lcd_puts("left");  
+          lcd_gotoxy(8,1);
+          lcd_puts("left  ");  
         } else if (value > 1000){
-          lcd_puts("right");
+          lcd_gotoxy(8,1);
+          lcd_puts("right ");
         }
-      } else if (ADMUX == 65){
-        lcd_gotoxy(8, 1); 
-        lcd_puts("      ");
-        lcd_gotoxy(8, 1);
-        
+      } else if (ADMUX == 65){ //ADC1 => Y-axis
         if (value < 20){
-          lcd_puts("down");  
+          lcd_gotoxy(8,1);
+          lcd_puts("down  ");  
         } else if (value > 1000){
-          lcd_puts("up");
+          lcd_gotoxy(8,1);
+          lcd_puts("up    ");
         }
       }
       

@@ -34,6 +34,16 @@
 #include <lcd.h>            // Peter Fleury's LCD library
 #include <stdlib.h>         // C library. Needed for number conversions
 
+#define OutputA  PB3 //arduino pin of A output 
+#define OutputB  PB4
+#define Pushbutton PD2 //arduino pin of encoder's pushbutton
+
+int push=0;      //variable to see if encoder's pushbutton has been pressed
+int current1;
+int last_value;
+int current2; 
+int amount=3;
+
 
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
@@ -46,6 +56,8 @@ int main(void)
 {
     // Initialize LCD display
     lcd_init(LCD_DISP_ON);
+    lcd_gotoxy(1, 0); lcd_puts("value:");
+    lcd_gotoxy(3, 1); lcd_puts("key:");
 
     // Configure Analog-to-Digital Convertion unit
     // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
@@ -58,6 +70,13 @@ int main(void)
     ADCSRA = ADCSRA | (1<<ADIE);
     // Set clock prescaler to 128
     ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
+
+    /*GPIO_mode_input_pullup(&DDRB, OutputA);
+    GPIO_mode_input_pullup(&DDRB, OutputB);
+    GPIO_mode_input_pullup(&DDRB, Pushbutton);
+
+    push = GPIO_read(&DDRB, Pushbutton);*/
+   
 
     // Configure 16-bit Timer/Counter1 to start ADC conversion
     // Set prescaler to 33 ms and enable overflow interrupt
@@ -101,55 +120,69 @@ ISR(ADC_vect)
     static uint8_t no_of_overflows = 0;
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = ADC;
+    value = ADC;  //0111_1000
     
-    static uint8_t aux = 0;  // Tenths of a second
+    
     
     no_of_overflows++;
     if (no_of_overflows >= 3) {
       no_of_overflows = 0;
-      itoa(value, string, 10);
-      lcd_gotoxy(8,0);
-      lcd_puts("    ");
-      lcd_gotoxy(8,0); //this is done to properly update de value        lcd_puts(string);
+        itoa(value, string, 10);
+        lcd_gotoxy(8,0);
+        lcd_puts("    ");
+        lcd_gotoxy(8,0); //this is done to properly update de value
+        lcd_puts(string);
+        itoa(value, string, 16); // 16 to display the value in hexa
+        lcd_gotoxy(12,0);
+        lcd_puts("    ");
+        lcd_gotoxy(13,0); //this is done to properly update de value
+        lcd_puts(string);
 
-      lcd_clrscr();
-      switch (value)
-      {
+        lcd_gotoxy(8, 1); 
+        lcd_puts("      ");
+        lcd_gotoxy(8, 1);
+      switch (value) {
         case 0:
-          lcd_clrscr();
-          lcd_gotoxy(11,0);
-          lcd_puts("right");
-        break;
-        case 1:
-          lcd_clrscr();
-          lcd_gotoxy(0,0);
-          lcd_puts("left");
-        break;
-        case 2:
-          lcd_clrscr();
-          lcd_gotoxy(7,0);
-          lcd_puts("up");
-        break;
-        case 3:
-          lcd_clrscr();
-          lcd_gotoxy(7,1);
-          lcd_puts("down");
-        break;
-        case 4:
-          lcd_clrscr();
-          lcd_gotoxy(0,1);
-          lcd_puts("static");
-        break;
-        case 5:
-          lcd_clrscr();
-          lcd_gotoxy(12,1);
-          lcd_puts("push");
-        break;
-    
-    default:
-      break;
-    }
+            lcd_puts("down");
+            break;
+        case 1022:
+            lcd_puts("up");
+            break;
+        case 1023:
+            lcd_puts("up");
+            break;
+        default:
+            break;
+      }
+
+     // last_value = GPIO_read(&DDRB, OutputA); // read initial value of outputA
+       
+
+    /*while(push==0){
+
+    current1= GPIO_read(&DDRB,OutputA);
+
+      if(current1 != last_value){
+        current2=GPIO_read(&DDRB, OutputB);
+            if(current2 !=current1){
+               amount++;
+            }
+            else{
+               amount--;
+            }
+      }
+
+      last_value=current1;
+      char string[2];
+
+      itoa(push,string,10); //convert decimal value to string
+      lcd_gotoxy(0,1);
+      lcd_puts(string);
+
+
+      
+
+    }*/
         
     }
     

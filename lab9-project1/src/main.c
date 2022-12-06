@@ -34,17 +34,8 @@
 #include <lcd.h>            // Peter Fleury's LCD library
 #include <stdlib.h>         // C library. Needed for number conversions
 
-#define OutputA  PB3 //arduino pin of A output 
-#define OutputB  PB4
 #define Pushbutton PD2 //arduino pin of encoder's pushbutton
-
-int push=0;      //variable to see if encoder's pushbutton has been pressed
-int current1;
-int last_value;
-int current2; 
-int amount=3;
-
-
+uint8_t joybutton = 0;
 
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
@@ -57,8 +48,12 @@ int main(void)
 {
     // Initialize LCD display
     lcd_init(LCD_DISP_ON);
-    lcd_gotoxy(1, 0); lcd_puts("value:");
-    lcd_gotoxy(3, 1); lcd_puts("key:");
+    lcd_gotoxy(1, 0); 
+    lcd_puts("value:");
+    lcd_gotoxy(3, 1); 
+    lcd_puts("key:");
+
+    GPIO_mode_input_pullup(&DDRD, Pushbutton);
 
     // Configure Analog-to-Digital Convertion unit
     // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
@@ -107,6 +102,8 @@ int main(void)
 ISR(TIMER1_OVF_vect)
 {
     
+    joybutton = GPIO_read(&PIND, Pushbutton);
+
     if(ADMUX == 64){ // using ADC0
         ADMUX = ADMUX | (1<<MUX0);
     } else { // using ADC1
@@ -122,6 +119,7 @@ ISR(TIMER1_OVF_vect)
  **********************************************************************/
 ISR(ADC_vect)
 {
+  
     uint16_t value;
     char string[4];  // String for converted numbers by itoa()
 
@@ -130,7 +128,8 @@ ISR(ADC_vect)
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
     value = ADC;  //1111_1010
 
-    no_of_overflows++;
+    no_of_overflows++;  
+
     if (no_of_overflows >= 3) {
       no_of_overflows = 0;
         itoa(value, string, 10);
@@ -138,6 +137,8 @@ ISR(ADC_vect)
         lcd_puts("    ");
         lcd_gotoxy(8,0); //this is done to properly update de value
         lcd_puts(string);
+
+        
       
       if (ADMUX == 64) { //ADC0 => X-axis
         if (value < 20){
@@ -150,47 +151,22 @@ ISR(ADC_vect)
       } else if (ADMUX == 65){ //ADC1 => Y-axis
         if (value < 20){
           lcd_gotoxy(8,1);
-          lcd_puts("down  ");  
+          lcd_puts("up    ");  
         } else if (value > 1000){
           lcd_gotoxy(8,1);
-          lcd_puts("up    ");
+          lcd_puts("down  ");
         }
       }
-      
-        
 
-        
-
-     // last_value = GPIO_read(&DDRB, OutputA); // read initial value of outputA
-       
-
-    /*while(push==0){
-
-    current1= GPIO_read(&DDRB,OutputA);
-
-      if(current1 != last_value){
-        current2=GPIO_read(&DDRB, OutputB);
-            if(current2 !=current1){
-               amount++;
-            }
-            else{
-               amount--;
-            }
-      }
-
-      last_value=current1;
-      char string[2];
-
-      itoa(push,string,10); //convert decimal value to string
-      lcd_gotoxy(0,1);
-      lcd_puts(string);
-
-
-      
-
-    }*/
-        
+      if (joybutton == 0){
+        lcd_gotoxy(8,1);
+        lcd_puts("      ");
+      }         
     }
+
+    
+
+        
+  }
     
     // Else do nothing and exit the ISR
-}

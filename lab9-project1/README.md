@@ -26,7 +26,7 @@ Our connections:
 1. RS (Register Select) connected to PB0
 2. R/W (Read/Write signal) connected to GND
 3. E (Read/Write Enable) connected to PB1
-4. NC not connected on the PmodCLP
+4. NC connected to GND
 5. GND connected to ground node
 6. VCC connected to VCC node
 
@@ -68,7 +68,9 @@ Put flowchats of your algorithm(s). Write descriptive text of your libraries and
 
 ## Video
 
-Insert a link to a short video with your practical implementation example (1-3 minutes, e.g. on YouTube).
+https://www.youtube.com/watch?v=WugzbzgTG3k
+
+
 
 ## References
 

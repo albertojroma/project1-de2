@@ -62,9 +62,7 @@ There is no need to connect any of the pins for our proyect
 Put flowchats of your algorithm(s). Write descriptive text of your libraries and source files. Put direct links to these files in `src` or `lib` folders.
 
 ## Video
-https://user-images.githubusercontent.com/114478211/206809750-2f9e4ae7-bb13-47f1-a906-5bb4ac51c76c.mp4
-
-[Video on youtube](https://www.youtube.com/watch?v=WugzbzgTG3k)
+https://user-images.githubusercontent.com/114478211/206811537-af3ff59d-5ea7-48df-b456-e39d1ad0dfa5.mp4
 
 ## References
 

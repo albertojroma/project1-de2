@@ -9,13 +9,18 @@
 
 
 ### Arduino UNO
+
 We have used the Arduino UNO board, which is based on the ATMEGA328P AVR chip.
 Then, are shown needed devices in order to implement the Hardware descripction; an Analog joy-stick, a Digilent PmodCLP LCD module and an Arduino Uno michrocontroller:
 
 ![arduino pines](https://user-images.githubusercontent.com/114478665/205801328-98a1b3a3-3683-46dd-b304-cfa29902ad7a.jpeg)
 
+### Scheme
+
+![Scheme](https://user-images.githubusercontent.com/114478211/206809155-5146905e-69a0-4d58-9042-1b07a9d2cd11.jpg)
 
 ### LCD module connections
+
 The PmodCLP utilizes a Samsung KS0066 LCD controller to display information to a Sunlike LCD panel. The module can execute a variety of instructions, such as erasing specific characters, setting different display modes, scrolling, and displaying user-defined characters.
 
 ![LCD](https://user-images.githubusercontent.com/114478665/205805599-93924876-041f-4d80-b408-3c0fd2f10418.png)
@@ -40,9 +45,6 @@ Our connections:
 
 - Header J1-Top Half
 There is no need to connect any of the pins for our proyect
-
-### Scheme
-![Scheme](https://user-images.githubusercontent.com/114478211/206809155-5146905e-69a0-4d58-9042-1b07a9d2cd11.jpg)
 
 ### Joystick
 

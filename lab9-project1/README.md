@@ -2,8 +2,8 @@
 
 ### Team members
 
-* Alberto Jesús Rodríguez Machado (responsible for xxx)
-* Juan Gabriel Villarruel Aragón (responsible for xxx)
+* Alberto Jesús Rodríguez Machado (responsible for joy-stick movement)
+* Juan Gabriel Villarruel Aragón (responsible for joy-stick button)
 
 ## Hardware description
 
@@ -39,19 +39,12 @@ Our connections:
 12. VCC connected to VCC node
 
 - Header J1-Top Half
-1. DB0(Data Bit 0) not connected on the PmodCLP
-2. DB1(Data Bit 1) not connected on the PmodCLP
-3. DB2(Data Bit 2) not connected on the PmodCLP
-4. DB3(Data Bit 3) not connected on the PmodCLP
-5. GND connected to ground node
-6. VCC connected to VCC node
+There is no need to connect any of the pins for our proyect
 
+### Scheme
+![Scheme](https://user-images.githubusercontent.com/114478211/206809155-5146905e-69a0-4d58-9042-1b07a9d2cd11.jpg)
 
-
-
-
-
-    ### Joystick
+### Joystick
 
 ![joystick-pinout](https://user-images.githubusercontent.com/114478665/205809645-354abd0d-8842-42dd-b8fd-089f4948db37.jpg)
 
@@ -59,7 +52,7 @@ Our connections:
 * 5v is connected to VCC node
 * Vrx outputs an analog value corresponding to the horizontal positin (called x-coordinate)
 * Vry outputs an analog value corresponding to the vertical position (called y-coordinate)
-* SW is the output from the pushbutton inside the joystick. It's normally oopen. If we use a pull-up resistor in this pin, the SW pin will be High when it is not pressed, and Low when it is pressed.
+* SW is the output from the pushbutton inside the joystick. It's normally open. If we use a pull-up resistor in this pin, the SW pin will be High when it is not pressed, and Low when it is pressed.
 
 
 ## Software description
@@ -67,10 +60,7 @@ Our connections:
 Put flowchats of your algorithm(s). Write descriptive text of your libraries and source files. Put direct links to these files in `src` or `lib` folders.
 
 ## Video
-
 https://www.youtube.com/watch?v=WugzbzgTG3k
-
-
 
 ## References
 

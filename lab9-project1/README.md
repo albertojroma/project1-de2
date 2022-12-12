@@ -59,9 +59,31 @@ There is no need to connect any of the pins for our proyect
 
 ## Software description
 
-Put flowchats of your algorithm(s). Write descriptive text of your libraries and source files. Put direct links to these files in `src` or `lib` folders.
+Put flowchats of your algorithm(s). Write descriptive text of your libraries and source files. Put direct links to these files in `src` or `lib` folders. <br/>
 
-[main.c](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/src/main.c) use Analog-to-digital conversion to read joy-stick movements and button and display it on LCD screen. These are its flowdiagrams
+This project contains a total of 7 files with this structure: <br/>
+
+```c
+├── include
+│    └── timer.h
+├── lib
+│    │   ├── gpio
+│    │   ├── gpio.c
+│    │   └── gpio.h
+│    └── lcd
+│         ├── lcd_definitions.h
+│         ├── lcd.c
+│         └── lcd.h
+└── src
+     └── main.c 
+```
+* [timer.h](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/include/timer.h) Timer library for AVR-GCC
+* [gpio.c](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/lib/gpio/gpio.c) Contains function definitions for GPIO AVR-GCC
+* [gpio.h](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/lib/gpio/gpio.h) The library contains functions for controlling AVRs' gpio pin(s)
+* [lcd_definitions.h](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/lib/lcd/lcd_definitions.h) The library contains functions for Adjusting the display settings 
+* [lcd.c](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/lib/lcd/lcd.c) Contains basic routines definitions for interfacing a HD44780U-based text lcd display
+* [lcd.h](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/lib/lcd/lcd.h) Basic routines for interfacing a HD44780U-based character LCD display
+* [main.c](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/src/main.c) use Analog-to-digital conversion to read joy-stick movements and button and display it on LCD screen. These are its flowdiagrams
 
 * Main function
 ![Main function](https://user-images.githubusercontent.com/114478211/207087037-c18011d3-c160-437d-851f-5536496ef7d7.jpg)

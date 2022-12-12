@@ -1,7 +1,7 @@
 /***********************************************************************
  * 
- * Use Analog-to-digital conversion to read joy-stick and rotary encoder 
- * movements and display it on LCD screen.
+ * Use Analog-to-digital conversion to read joy-stick movements and button
+ * and display it on LCD screen.
  * 
  * ATmega328P (Arduino Uno), 16 MHz, PlatformIO
  *
@@ -34,8 +34,8 @@
 #include <lcd.h>            // Peter Fleury's LCD library
 #include <stdlib.h>         // C library. Needed for number conversions
 
-#define Pushbutton PD2 //arduino pin of encoder's pushbutton
-uint8_t joybutton = 0;
+#define Pushbutton PD2      //arduino pin of encoder's pushbutton
+uint8_t joybutton = 0;      //represents the state of joystick button
 
 /* Function definitions ----------------------------------------------*/
 /**********************************************************************
@@ -48,17 +48,19 @@ int main(void)
 {
     // Initialize LCD display
     lcd_init(LCD_DISP_ON);
+
+    // Set characters that won't change in the LCD
     lcd_gotoxy(1, 0); 
     lcd_puts("value:");
     lcd_gotoxy(3, 1); 
     lcd_puts("key:");
 
+    // Enable input pull-up in PD2
     GPIO_mode_input_pullup(&DDRD, Pushbutton);
 
     // Configure Analog-to-Digital Convertion unit
     // Select ADC voltage reference to "AVcc with external capacitor at AREF pin"
     ADMUX = ADMUX | (1<<REFS0);
-    // Select input channel ADC0 (voltage divider pin)
 
     // Enable ADC module
     ADCSRA = ADCSRA | (1<<ADEN);
@@ -66,14 +68,7 @@ int main(void)
     // Enable conversion complete interrupt
     ADCSRA = ADCSRA | (1<<ADIE);
     // Set clock prescaler to 128
-    ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);
-
-    /*GPIO_mode_input_pullup(&DDRB, OutputA);
-    GPIO_mode_input_pullup(&DDRB, OutputB);
-    GPIO_mode_input_pullup(&DDRB, Pushbutton);
-
-    push = GPIO_read(&DDRB, Pushbutton);*/
-   
+    ADCSRA = ADCSRA | (1<<ADPS2 | 1<<ADPS1 | 1<<ADPS0);   
 
     // Configure 16-bit Timer/Counter1 to start ADC conversion
     // Set prescaler to 33 ms and enable overflow interrupt
@@ -101,12 +96,11 @@ int main(void)
  **********************************************************************/
 ISR(TIMER1_OVF_vect)
 {
-    
     joybutton = GPIO_read(&PIND, Pushbutton);
 
-    if(ADMUX == 64){ // using ADC0
+    if(ADMUX == 64){ // ADC0 = 0b0100_0000
         ADMUX = ADMUX | (1<<MUX0);
-    } else { // using ADC1
+    } else { // ADC1 = 0b0100_0001
         ADMUX = ADMUX & ~(1<<MUX0);
     }
     // Start ADC conversion
@@ -120,53 +114,54 @@ ISR(TIMER1_OVF_vect)
 ISR(ADC_vect)
 {
   
-    uint16_t value;
+    uint16_t value;  // auxiliar variable
     char string[4];  // String for converted numbers by itoa()
 
     static uint8_t no_of_overflows = 0;
     // Read converted value
     // Note that, register pair ADCH and ADCL can be read as a 16-bit value ADC
-    value = ADC;  //1111_1010
+    value = ADC; 
 
     no_of_overflows++;  
 
-    if (no_of_overflows >= 3) {
+    if (no_of_overflows >= 3) 
+    {
       no_of_overflows = 0;
-        itoa(value, string, 10);
-        lcd_gotoxy(8,0);
-        lcd_puts("    ");
-        lcd_gotoxy(8,0); //this is done to properly update de value
-        lcd_puts(string);
+      itoa(value, string, 10);
+      lcd_gotoxy(8,0);
+      lcd_puts("    ");
+      lcd_gotoxy(8,0); //this is done to properly update de value
+      lcd_puts(string);
 
-        
-      
-      if (ADMUX == 64) { //ADC0 => X-axis
-        if (value < 20){
+      if (ADMUX == 64) //ADC0 => X-axis 
+      { 
+        if (value < 20)
+        {
           lcd_gotoxy(8,1);
           lcd_puts("left  ");  
-        } else if (value > 1000){
+        } else if (value > 1000)
+        {
           lcd_gotoxy(8,1);
           lcd_puts("right ");
         }
-      } else if (ADMUX == 65){ //ADC1 => Y-axis
-        if (value < 20){
+      } else if (ADMUX == 65) //ADC1 => Y-axis
+      { 
+        if (value < 20)
+        {
           lcd_gotoxy(8,1);
           lcd_puts("up    ");  
-        } else if (value > 1000){
+        } else if (value > 1000)
+        {
           lcd_gotoxy(8,1);
           lcd_puts("down  ");
         }
       }
 
-      if (joybutton == 0){
+      if (joybutton == 0)
+      {
         lcd_gotoxy(8,1);
         lcd_puts("      ");
       }         
     }
-
-    
-
-        
+    // Else do nothing and exit the ISR       
   }
-    
-    // Else do nothing and exit the ISR

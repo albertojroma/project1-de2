@@ -61,6 +61,18 @@ There is no need to connect any of the pins for our proyect
 
 Put flowchats of your algorithm(s). Write descriptive text of your libraries and source files. Put direct links to these files in `src` or `lib` folders.
 
+[main.c](https://github.com/albertojroma/project1-de2/blob/main/lab9-project1/src/main.c) use Analog-to-digital conversion to read joy-stick movements and button and display it on LCD screen. These are its flowdiagrams
+
+* Main function *
+![Main function](https://user-images.githubusercontent.com/114478211/207087037-c18011d3-c160-437d-851f-5536496ef7d7.jpg)
+
+* TIMER1_OVF *
+![Timer1_OVF](https://user-images.githubusercontent.com/114478211/207087175-5a7c713d-fa7c-4c21-b8b6-89252cddb5d6.jpg)
+
+* ADC *
+![ADC_vect](https://user-images.githubusercontent.com/114478211/207087324-8a873971-f8fe-422e-80f4-9cffa5887098.jpg)
+
+
 ## Video
 https://user-images.githubusercontent.com/114478211/206811537-af3ff59d-5ea7-48df-b456-e39d1ad0dfa5.mp4
 

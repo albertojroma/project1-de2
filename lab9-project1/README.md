@@ -66,10 +66,10 @@ Put flowchats of your algorithm(s). Write descriptive text of your libraries and
 * Main function
 ![Main function](https://user-images.githubusercontent.com/114478211/207087037-c18011d3-c160-437d-851f-5536496ef7d7.jpg)
 
-* TIMER1_OVF
+* TIMER1_OVF <br/>
 ![Timer1_OVF](https://user-images.githubusercontent.com/114478211/207087175-5a7c713d-fa7c-4c21-b8b6-89252cddb5d6.jpg)
 
-* ADC
+* ADC <br/>
 ![ADC_vect](https://user-images.githubusercontent.com/114478211/207087324-8a873971-f8fe-422e-80f4-9cffa5887098.jpg)
 
 
